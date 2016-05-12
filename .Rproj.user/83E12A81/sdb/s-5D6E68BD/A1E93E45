@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# This is the server logic for a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\nlibrary(plyr)\n\n## defining the functions that are used in the app, first the saveData function to save the data from the sliders and then the circle function that is used to generate the points\n\noutputDir <- \"responses\"\nfields <- c(\"slide\")\n\nsaveData <- function(data) {\n  data <- t(data)\n  # Create a unique file name\n  fileName <- sprintf(\"%s_%s.csv\", as.integer(Sys.time()), digest::digest(data))\n  # Write the file to the local system\n  write.csv(\n    x = data,\n    file = file.path(outputDir, fileName), \n    row.names = FALSE, quote = TRUE\n  )\n}\n\ncircleFun <- function(center = c(0,0),diameter = 1, npoints = 100){\n  r = diameter / 2\n  tt <- seq(0,2*pi,length.out = npoints)\n  xx <- center[1] + r * cos(tt)\n  yy <- center[2] + r * sin(tt)\n  return(data.frame(xx = xx, yy = yy))\n}\n\n\nx <- 1:500\ny   <- runif(500,0,1)\nz   <- runif(500,0,1)\ntheta <- runif(500,0,360)\nycoor <- y * cos(theta)\nzcoor <- z * sin(theta)\n\n##origin, diameter and points\ncir <- circleFun(c(0,0),2,npoints = 500)\ntest <- cbind.data.frame(x, y, z,ycoor,zcoor, theta, cir)\n\nshinyServer(function(input, output, session) {\n\n  output$distPlot <- renderPlot({\n\n    # generate bins based on input$bins from ui.R\n  \n    # draw the histogram with the specified number of bins\n##    p <- ggplot(subset(test, x < input$slide), aes(ycoor,zcoor))\n##    p + geom_jitter(size=5) + coord_fixed(ratio = 1) + stat_ellipse(type=\"euclid\", level=1.01)\n  \n    \n    ## this is extra junk but it will gradually draw a circle as it adds points  \n    # p <- ggplot(subset(test, x < input$slide), aes(ycoor,zcoor))\n    # p + geom_point(size=4) + coord_fixed(ratio = 1) + geom_path(aes(xx, yy))\n    \n    p <- ggplot(test, aes(ycoor,zcoor))\n    p + geom_point(data=subset(test, x < input$slide), size=4) + coord_fixed(ratio = 1) + geom_path(aes(xx, yy)) + scale_x_continuous(name=\"\", breaks=NULL) +\n      scale_y_continuous(name=\"\", breaks=NULL) + theme(\n      axis.text.x = element_blank(),\n      axis.text.y = element_blank(),\n      axis.ticks = element_blank())\n  })\n  \n  formData <- reactive({\n    data <- sapply(fields, function(x) input[[x]])\n    data\n  })\n  \n  # When the Submit button is clicked, save the form data\n  observeEvent(input$submit, {\n    saveData(formData())\n  })\n   }\n)\n\n",
+    "created" : 1463091061762.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "297618565",
+    "id" : "A1E93E45",
+    "lastKnownWriteTime" : 1463087719,
+    "last_content_update" : 1463087719,
+    "path" : "~/git/Survey Experiment Shiny App/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

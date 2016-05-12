@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# This is the user-interface definition of a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\n\n\n\nshinyUI(  fluidPage(\n  DT::dataTableOutput(\"responses\", width = 300), tags$hr(),\n  tags$head(tags$style(HTML('.irs-from, .irs-to, .irs-min, .irs-max, .irs-single {\n                            visibility: hidden !important;\n                            }'))),\n  \n  # Application title\n  titlePanel(\"Chapter 6 Test\"),\n\n  \n  fluidRow(\n    column(4,\n      wellPanel(\n      sliderInput(\"slide\", \n                  \"Select the Value from Slider\", \n                  ticks = F,\n                  min = 1, \n                  max = 500, \n                  value = 0)\n      ),\n      actionButton(\"submit\",\"submit\")\n    ),\n\n\n    # Show a plot of the generated distribution\n    column(8,\n      plotOutput(\"distPlot\")\n    )\n  )\n))\n",
+    "created" : 1463091062954.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4274487691",
+    "id" : "308AFDC7",
+    "lastKnownWriteTime" : 1463087178,
+    "last_content_update" : 1463087178,
+    "path" : "~/git/Survey Experiment Shiny App/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
