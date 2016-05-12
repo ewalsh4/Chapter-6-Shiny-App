@@ -26,6 +26,7 @@ shinyUI(  fluidPage(
                   max = 500, 
                   value = 0)
     ),
+    junk
 
     # Show a plot of the generated distribution
     mainPanel(
