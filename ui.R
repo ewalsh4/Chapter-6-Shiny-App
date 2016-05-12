@@ -8,7 +8,10 @@
 library(shiny)
 library(ggplot2)
 
+
+
 shinyUI(  fluidPage(
+  DT::dataTableOutput("responses", width = 300), tags$hr(),
   tags$head(tags$style(HTML('.irs-from, .irs-to, .irs-min, .irs-max, .irs-single {
                             visibility: hidden !important;
                             }'))),
@@ -16,20 +19,23 @@ shinyUI(  fluidPage(
   # Application title
   titlePanel("Chapter 6 Test"),
 
-  # Sidebar with a slider input for number of bins
-  sidebarLayout(
-    sidebarPanel(
+  
+  fluidRow(
+    column(4,
+      wellPanel(
       sliderInput("slide", 
                   "Select the Value from Slider", 
                   ticks = F,
                   min = 1, 
                   max = 500, 
                   value = 0)
+      ),
+      actionButton("submit","submit")
     ),
-   
+
 
     # Show a plot of the generated distribution
-    mainPanel(
+    column(8,
       plotOutput("distPlot")
     )
   )

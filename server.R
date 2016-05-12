@@ -9,6 +9,23 @@ library(shiny)
 library(ggplot2)
 library(plyr)
 
+## defining the functions that are used in the app, first the saveData function to save the data from the sliders and then the circle function that is used to generate the points
+
+outputDir <- "responses"
+fields <- c("slide")
+
+saveData <- function(data) {
+  data <- t(data)
+  # Create a unique file name
+  fileName <- sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
+  # Write the file to the local system
+  write.csv(
+    x = data,
+    file = file.path(outputDir, fileName), 
+    row.names = FALSE, quote = TRUE
+  )
+}
+
 circleFun <- function(center = c(0,0),diameter = 1, npoints = 100){
   r = diameter / 2
   tt <- seq(0,2*pi,length.out = npoints)
@@ -29,7 +46,7 @@ zcoor <- z * sin(theta)
 cir <- circleFun(c(0,0),2,npoints = 500)
 test <- cbind.data.frame(x, y, z,ycoor,zcoor, theta, cir)
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
   output$distPlot <- renderPlot({
 
@@ -50,8 +67,17 @@ shinyServer(function(input, output) {
       axis.text.x = element_blank(),
       axis.text.y = element_blank(),
       axis.ticks = element_blank())
-
-
   })
+  
+  formData <- reactive({
+    data <- sapply(fields, function(x) input[[x]])
+    data
+  })
+  
+  # When the Submit button is clicked, save the form data
+  observeEvent(input$submit, {
+    saveData(formData())
+  })
+   }
+)
 
-})
