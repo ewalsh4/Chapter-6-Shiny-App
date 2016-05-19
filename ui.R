@@ -36,7 +36,10 @@ shinyUI(  fluidPage(
 
     # Show a plot of the generated distribution
     column(8,
-      plotOutput("distPlot")
+      plotOutput("distPlot"),
+      br(),
+      tags$h1("Test"),
+      tags$img(src="blue_bar_29_87.png")
     )
   )
 ))
